@@ -1,58 +1,63 @@
-# create-svelte
+# kaboom-svelte
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+This is a small library made to make it easier to use the [kaboom.js](https://kaboomjs.com/) game engine with svelte. The most notable feature is the Menu component and the menu system, which allows you to overlay DOM elements on top of the game canvas while keeping the same size as the game canvas, letterbox included, after setup.
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+## Installation
 
-## Creating a project
+Run `npm install kaboom-svelte` to install the library.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Usage
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Wrap your interface in a Menu
 
-# create a new project in my-app
-npm create svelte@latest my-app
+```svelte
+<!-- MyMenu -->
+<script>
+    import { Menu, closeMenu } from 'kaboom-svelte';
+</script>
+
+<Menu backingResolution={{ width: 1920, height: 1080 }} scale={4}>
+    <h1>Hello, world!</h1>
+    <button on:clic={closeMenu}>Hi!</button>
+</Menu>
 ```
 
-## Developing
+Setup the manager and start the engine
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```svelte
+<script lang="ts">
+    import { onMount } from "svelte";
+    import { MyMenu } from './MyMenu.svelte';
+    import { startGame, menuOpen, currentMenu, menuHierarchy } from 'kaboom-svelte';
 
-```bash
-npm run dev
+    let isMenuOpen = false;
+    let currentOpenMenu = "";
+    export let canvas: HTMLCanvasElement;
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+    menuOpen.subscribe(value => isMenuOpen = value);
+    currentMenu.subscribe(value => currentOpenMenu = value);
+
+    onMount(() => {
+        menuHierarchy.set("main", { previous: null, next: []});
+        // startGame returns a KaboomCtx and has an optional KaboomOpt parameter. Defaults are
+        // global: false,
+        // canvas: canvas,
+        // width: 1920,
+        // height: 1080,
+        // letterbox: true 
+        startGame(canvas);
+    });
+</script>
+
+<div class="h-screen w-screen relative">
+    <canvas id="game" bind:this={canvas}></canvas>
+    {#if isMenuOpen}
+        <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+        {#if currentOpenMenu === "main"}
+            <MyMenu />
+        {/if}
+        </div>
+    {/if}
+</div>
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```bash
-npm run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
