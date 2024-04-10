@@ -1,5 +1,5 @@
-import kaboom, { type KaboomCtx, type KaboomOpt } from "kaboom";
-import { menuHierachy, navigateTo } from "./menumanager.js";
+import kaboom from "kaboom";
+import { type KaboomCtx, type KaboomOpt } from "kaboom";
 
 export let k: KaboomCtx;
 

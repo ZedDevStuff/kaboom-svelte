@@ -1,6 +1,7 @@
 {
   "name": "kaboom-svelte",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "license": "MIT",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run package",
