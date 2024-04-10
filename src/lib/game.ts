@@ -9,7 +9,8 @@ export const defaultOptions = {
     height: 1080,
     letterbox: true,
 }
-export function setupKaboom(k: KaboomCtx) {
+export function setupKaboom(kaboom: KaboomCtx) {
+    k = kaboom;
     window.addEventListener("keydown", (e) => {
         if(e.key === "F1") {
             e.preventDefault();
