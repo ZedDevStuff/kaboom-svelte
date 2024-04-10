@@ -27,8 +27,9 @@ Setup the manager and start the engine
 ```svelte
 <script lang="ts">
     import { onMount } from "svelte";
-    import { MyMenu } from './MyMenu.svelte';
-    import { startGame, menuOpen, currentMenu, menuHierarchy } from 'kaboom-svelte';
+    import { MyMenu } from "./MyMenu.svelte";
+    import { startGame } from "./game",
+    import { setupKaboom, menuOpen, currentMenu, menuHierarchy } from 'kaboom-svelte';
 
     let isMenuOpen = false;
     let currentOpenMenu = "";
@@ -39,13 +40,10 @@ Setup the manager and start the engine
 
     onMount(() => {
         menuHierarchy.set("main", { previous: null, next: []});
-        // startGame returns a KaboomCtx and has an optional KaboomOpt parameter. Defaults are
-        // global: false,
-        // canvas: canvas,
-        // width: 1920,
-        // height: 1080,
-        // letterbox: true 
-        startGame(canvas);
+        // startGame returns a KaboomCtx. Make sure your kaboom setup enables letterbox
+        let k = startGame(canvas);
+        // setupKaboom will prevent the F1 key from opening whatever your browser does with it and create a "menus" scene
+        setupKaboom(k);
     });
 </script>
 
@@ -60,4 +58,3 @@ Setup the manager and start the engine
     {/if}
 </div>
 ```
-
