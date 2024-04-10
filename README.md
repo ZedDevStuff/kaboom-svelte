@@ -18,7 +18,7 @@ Wrap your interface in a Menu
 
 <Menu backingResolution={{ width: 1920, height: 1080 }} scale={4}>
     <h1>Hello, world!</h1>
-    <button on:clic={closeMenu}>Hi!</button>
+    <button on:click={closeMenu}>Hi!</button>
 </Menu>
 ```
 
